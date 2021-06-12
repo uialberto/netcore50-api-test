@@ -8,7 +8,7 @@ namespace ProjectTest.Tests
         [TestMethod]
         public void ReturnsOK()
         {
-            
+            string hola = "hola";
         }
 
         [TestMethod]
