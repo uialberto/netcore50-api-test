@@ -5,7 +5,7 @@ metadata:
   labels:
     app: service-aforo255
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: service-aforo255
@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: service-aforo255
-        image: uialberto/servicenet5azure:#{Build.BuildId}#
+        image: uialberto/servicenet5azure:latest
         ports:
         - containerPort: 80
         imagePullPolicy: Always
