@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('SCM') {
             steps {
-                git branch: 'main', url: 'https://github.com/Stywar/netcore50-api-test'
+                git branch: 'main', url: 'https://github.com/uialberto/netcore50-api-test.git'
                 
             }
         }
@@ -19,24 +19,21 @@ pipeline {
         stage('Docker') {
             steps {
                 bat(script: 'docker login --username %UsernameDockerHub% --password %PasswordDocker%', returnStdout: true);
-                bat(script: 'docker build -t antony0618/servicenet5 .', returnStdout: true);
-                bat(script: 'docker push antony0618/servicenet5', returnStdout: true);
+                bat(script: 'docker build -t uialberto/servicenet5jenkin .', returnStdout: true);
+                bat(script: 'docker push uialberto/servicenet5jenkin', returnStdout: true);
             }
         }
         stage('Deploy Dev') {
             steps {
-                bat(script: 'az login --service-principal --username 60445a5a-4c7d-404e-96a0-0d5c83c4978f --password wP_yGAcZKPUZQBTd.ezSLAzpNAzY-ZcZ6l --tenant 74343d69-5375-4c7a-8cc9-08986488c964', returnStdout: true);
-                bat(script: 'az account set --subscription "StywarV"', returnStdout: true);
-                bat(script: 'az container restart --name micro5testservice --resource-group aforo255Devops', returnStdout: true);
-                //bat(script: 'az container delete --resource-group aforo255Devops --name micro5testservice --yes', returnStdout: true);
-                //bat(script: 'az container create --resource-group aforo255Devops --name micro5testservice --image antony0618/servicenet5:latest --dns-name-label micro5testservice --ports 80', returnStdout: true);
+                bat(script: 'az login --service-principal -u 895ee115-4b74-4ffc-9eba-928054ecf3fc -p qvND3~4NaO_pbaz38IG6cJCz2rX_Dj-prb --tenant b9a8f4e8-64dd-474a-be66-0dce5463c288', returnStdout: true);
+                bat(script: 'az account set --subscription "AlbertoDevelop"', returnStdout: true);
+                bat(script: 'az container restart --name devopsuialberto --resource-group RG-Test-Dev', returnStdout: true);                                
             }
         }
         stage('Deploy Prod') {
-            steps {
-                //bat(script: 'az aks get-credentials --resource-group aforo255Devops --name aforo255jenkins & kubectl config get-contexts --kubeconfig=%KUBE_PATH_CONFIG%', returnStdout: true);
-                bat(script: 'az aks get-credentials --resource-group  aforo255Devops  --name cluster-Devops & kubectl config get-contexts --kubeconfig=%KUBE_PATH_CONFIG%', returnStdout: true);
-                bat(script: 'kubectl config use-context cluster-Devops --kubeconfig=%KUBE_PATH_CONFIG%', returnStdout: true);
+            steps {                
+                bat(script: 'az aks get-credentials --resource-group  RG-Test-Dev  --name cluster-devops-ui & kubectl config get-contexts --kubeconfig=%KUBE_PATH_CONFIG%', returnStdout: true);
+                bat(script: 'kubectl config use-context cluster-devops-ui --kubeconfig=%KUBE_PATH_CONFIG%', returnStdout: true);
                 bat(script: 'Kubectl delete --all pods --kubeconfig=%KUBE_PATH_CONFIG% & kubectl apply -f k8s.yml --kubeconfig=%KUBE_PATH_CONFIG%', returnStdout: true);
             }
         }
