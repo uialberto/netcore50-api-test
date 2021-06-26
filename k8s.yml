@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: service-aforo255
-        image: uialberto/netcore50-api-test:latest
+        image: uialberto/servicenet5jenkin:latest
         ports:
         - containerPort: 80
         imagePullPolicy: Always
